@@ -1,0 +1,26 @@
+import requests
+from tensorflow.python.keras.applications.resnet50 import preprocess_input
+from tensorflow.python.keras.preprocessing.image import load_img, img_to_array
+import numpy as np
+import json
+
+
+SERVER_URL = 'http://localhost:8501/v1/models/drug_detector:predict'
+image_path = '../images/test/drug_01.jpg'
+
+image_size = 224
+
+img = img_to_array(load_img(image_path, target_size=(image_size, image_size)))
+img_array = np.array(img)
+input = preprocess_input(img_array)
+
+payload =  { "instances": [{'input_image': input.tolist()}]}
+
+total_time = 0
+
+for i in range(3):
+    r = requests.post(SERVER_URL, json=payload)
+    total_time += r.elapsed.total_seconds()
+pred = json.loads(r.content.decode('utf-8'))
+print('prediction is', pred)
+print('total time =', total_time)
