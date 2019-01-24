@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: drug_detector_pod
+  name: drug-detector-pod
   labels:
-    app: drug_detector
+    app: drug-detector
 spec:
   containers:
-  - name: drug_detector_serving
+  - name: drug-detector-serving
     image: hotrank/drug_detector_serving
     ports:
-    - name: tf_serving_port
+    - name: tf-serving-port
       containerPort: 8501

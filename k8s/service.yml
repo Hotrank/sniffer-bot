@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: drug_detector_service
+  name: drug-detector-service
 spec:
   ports:
   - port: 80
-    targetPort: tf_serving_port
+    targetPort: tf-serving-port
     protocol: TCP
   selector:
-    app: drug_detector
+    app: drug-detector
   type: LoadBalancer
