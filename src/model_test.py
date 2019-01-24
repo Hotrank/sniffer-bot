@@ -7,6 +7,7 @@ from os.path import join
 import numpy as np
 from tensorflow.python.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.models import model_from_json
+from time import time
 
 model_path = '../model/model.json'
 weight_path = '../model/model.h5'
@@ -35,7 +36,11 @@ def read_and_prep_images(img_paths, img_height=image_size, img_width=image_size)
     return(output)
 
 test_data = read_and_prep_images(image_paths)
+
+start = time()
 preds = np.argmax(model.predict(test_data),1)
+end = time()
+print('prediction time is:', end - start)
 
 acc = np.mean(preds == labels)
 print('accuracy is {:.3f}'.format(acc))
