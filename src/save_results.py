@@ -1,5 +1,12 @@
 import MySQLdb
 import datetime
+import subprocess
+
+path = '../images/test/drug_01.jpg'
+s3_path = 's3://drug-detector-images/drug_01.jpg'
+cmd = ['s3cmd', 'put', path, s3_path]
+subprocess.Popen(cmd)
+
 
 mydb = MySQLdb.connect(
   host="mysql-large.ccsroiuq1uw2.us-east-1.rds.amazonaws.com",
@@ -12,7 +19,6 @@ mydb = MySQLdb.connect(
 mycursor = mydb.cursor()
 
 url = 'test_url'
-path = 'test_path'
 date = datetime.datetime.today().strftime('%Y-%m-%d')
 flag = True
 
