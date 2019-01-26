@@ -27,6 +27,7 @@ test_dir = '../images/test/'
 fnames = os.listdir(test_dir)
 image_paths = [test_dir + fname for fname in fnames]
 labels = list(map(lambda x: 0 if x.startswith('drug') else 1, fnames))
+n_files = len(labels)
 
 image_size = 224
 def read_and_prep_images(img_paths, img_height=image_size, img_width=image_size):
@@ -38,9 +39,9 @@ def read_and_prep_images(img_paths, img_height=image_size, img_width=image_size)
 test_data = read_and_prep_images(image_paths)
 
 start = time()
-preds = np.argmax(model.predict(test_data),1)
+preds = model.predict(test_data)
 end = time()
-print('prediction time is:', end - start)
+print('prediction time is:', (end - start)/n_files)
 
 acc = np.mean(preds == labels)
 print('accuracy is {:.3f}'.format(acc))
