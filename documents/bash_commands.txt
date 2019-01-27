@@ -40,7 +40,7 @@ export KOPS_STATE_STORE=s3://kops-state-heming
 kops create cluster --node-count=3 --node-size=m4.large --zones=us-east-1b
 kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
 kops validate cluster  (it might take a few minutes for the cluster to be ready)
- 
+
 
 To check cluster info:
 kubectl cluster-info
@@ -54,6 +54,16 @@ http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-da
 token: 4trddmRaYY2wRngW4QbJWx16e9TM0dWV
 
 
+To install zmq and pyzmq
+sudo apt-get install libzmq3-dev
+conda install -c anaconda pyzmq
 
+to connect to intake-server:
+ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-34-228-191-34.compute-1.amazonaws.com
 
+install anaconda on ubuntu 16:
+curl -O https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
+bash Anaconda3-5.0.1-Linux-x86_64.sh
 
+create tensorflow environment
+conda create -n tf tensorflow
