@@ -1,0 +1,12 @@
+producer:
+ip: 10.0.0.13
+port 5557
+conda env: tf
+
+consumer:
+ip: 10.0.0.14
+conda env: test
+
+
+github:
+https://github.com/Hotrank/drug_detect.git
