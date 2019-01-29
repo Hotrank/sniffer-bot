@@ -1,0 +1,37 @@
+to spin up a kubernetes cluster on AWS:
+create an IAM user and assign policy
+aws configure: this will promt you to enter IAM credential and region
+create an s3 bucket and enable versioning to store kubernetes state
+export KOPS_CLUSTER_NAME=heming.k8s.local
+export KOPS_STATE_STORE=s3://kops-state-heming
+
+kops create cluster --node-count=3 --node-size=m4.large --zones=us-east-1b
+kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
+kops validate cluster  (it might take a few minutes for the cluster to be ready)
+
+
+To check cluster info:
+kubectl cluster-info
+
+To install a dashboard for kubernetes:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+
+kubectl proxy
+Then after getting the tokens set up I can see the dashboard on:
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+token: 4trddmRaYY2wRngW4QbJWx16e9TM0dWV
+
+Kubernetes have pod, deployment, service. Usually don't need to create pod, just create a service and specify
+the container, and the replicaset, it will automatically create the pods.
+Then, create a service with type: LoadBalancer to expose the app.
+
+to create a deployment, edit deployment.yml then run:
+kubectl create -f deployment.yml
+
+
+
+To see pods/services/deployments:
+kubectl get pods
+
+To delete a service:
+kubectl delete svc <YourServiceName>

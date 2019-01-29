@@ -5,7 +5,7 @@ import numpy as np
 import json
 from time import time
 
-SERVER_URL = 'http://ad78303631f8111e9a4dc0ec68af0841-1388077874.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict'
+SERVER_URL = 'http://a9b842962233511e9a4dc0ec68af0841-1173832660.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict'
 image_path = '../images/test/drug_01.jpg'
 
 image_size = 224

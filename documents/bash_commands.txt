@@ -20,6 +20,12 @@ sudo docker stop serving_base
 start new ssh agent:
 eval "$(ssh-agent -s)"
 
+install Docker:
+follow instruction from this post: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
+
+install nvidia-docker following this post: https://github.com/NVIDIA/nvidia-docker#quick-start
+
+
 create tensorflow serving image with my own model:
 sudo docker run -d --name serving_base_1 tensorflow/serving
 sudo docker cp /home/ubuntu/drug_detect/model/exported serving_base_1:models/drug_detector
@@ -30,36 +36,14 @@ run the tensorflow serving image as a container:
 sudo docker run -p 8501:8501 -t $USER/drug_detect_serving &
 #-p 8501:8501 means: Publishing the container’s port 8501 (where TF Serving responds to REST API requests) to the host’s port 8501
 
-to spin up a kubernetes cluster on AWS:
-create an IAM user and assign policy
-aws configure: this will promt you to enter IAM credential and region
-create an s3 bucket and enable versioning to store kubernetes state
-export KOPS_CLUSTER_NAME=heming.k8s.local
-export KOPS_STATE_STORE=s3://kops-state-heming
-
-kops create cluster --node-count=3 --node-size=m4.large --zones=us-east-1b
-kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
-kops validate cluster  (it might take a few minutes for the cluster to be ready)
-
-
-To check cluster info:
-kubectl cluster-info
-
-To install a dashboard for kubernetes:
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
-
-kubectl proxy
-Then after getting the tokens set up I can see the dashboard on:
-http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-token: 4trddmRaYY2wRngW4QbJWx16e9TM0dWV
+install Docker:
+follow instruction from this post: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
 
 
 To install zmq and pyzmq
 sudo apt-get install libzmq3-dev
 conda install -c anaconda pyzmq
 
-to connect to intake-server:
-ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-34-228-191-34.compute-1.amazonaws.com
 
 install anaconda on ubuntu 16:
 curl -O https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
@@ -67,3 +51,6 @@ bash Anaconda3-5.0.1-Linux-x86_64.sh
 
 create tensorflow environment
 conda create -n tf tensorflow
+
+get GPU info:
+sudo lshw -C display
