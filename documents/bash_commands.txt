@@ -36,6 +36,12 @@ run the tensorflow serving image as a container:
 sudo docker run -p 8501:8501 -t $USER/drug_detect_serving &
 #-p 8501:8501 means: Publishing the container’s port 8501 (where TF Serving responds to REST API requests) to the host’s port 8501
 
+To run it on a GPU server add the --runtime option:
+sudo docker run --runtime=nvidia -p 8502:8502 -t heming/drug_detector_gpu &
+
+install miniconda following this post:
+https://gist.github.com/arose13/fcc1d2d5ad67503ba9842ea64f6bac35
+
 install Docker:
 follow instruction from this post: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
 
@@ -49,8 +55,8 @@ install anaconda on ubuntu 16:
 curl -O https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
 bash Anaconda3-5.0.1-Linux-x86_64.sh
 
-create tensorflow environment
-conda create -n tf tensorflow
+create tensorflow environment with python 3.5
+conda create -n tf tensorflow python=3.5
 
 get GPU info:
 sudo lshw -C display
