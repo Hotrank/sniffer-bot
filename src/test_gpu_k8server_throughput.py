@@ -13,6 +13,7 @@ import os
 MODEL_SERVER_URL = 'http://ab61c4f06265211e987ef0ee9a12caec-2038447575.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict'
 test_dir = '../images/train/normal/'
 image_size = 224
+batch_size = 5
 
 
 
@@ -46,10 +47,14 @@ def worker(q):
         # val = (url, image_path, date, flag)
         # mycursor.execute(sql, val)
         count += 1
-        if count == 5:
+        if count == batch_size:
             payload =  { "instances": inputs}
             r = requests.post(MODEL_SERVER_URL, json=payload)
+            inputs = []
+            count == 0
             # mydb.commit()
+    payload =  { "instances": inputs}
+    r = requests.post(MODEL_SERVER_URL, json=payload)
     mydb.commit()
     mycursor.close()
     mydb.close()
