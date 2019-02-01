@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drug-detector-gpu-dep
+  labels:
+    app: drug-detector-gpu
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: drug-detector-gpu
+  template:
+    metadata:
+      labels:
+        app: drug-detector-gpu
+    spec:
+      containers:
+      - name: drug-detector-serving
+        image: hotrank/drug_detector_serving
+        resources:
+          limits:
+            nvidia.com/gpu: 1 # requesting 1 GPU
+        ports:
+        - name: tf-serving-port
+          containerPort: 8501

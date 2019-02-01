@@ -2,10 +2,10 @@ to spin up a kubernetes cluster on AWS:
 create an IAM user and assign policy
 aws configure: this will promt you to enter IAM credential and region
 create an s3 bucket and enable versioning to store kubernetes state
-export KOPS_CLUSTER_NAME=heming.k8s.local
+export KOPS_CLUSTER_NAME=heming-gpu.k8s.local
 export KOPS_STATE_STORE=s3://kops-state-heming
 
-kops create cluster --node-count=3 --node-size=m4.large --zones=us-east-1b
+kops create cluster --node-count=2 --node-size=p2.xlarge --zones=us-east-1b --master-size=m4.large
 kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
 kops validate cluster  (it might take a few minutes for the cluster to be ready)
 
