@@ -5,7 +5,7 @@ metadata:
   labels:
     app: drug-detector-gpu
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: drug-detector-gpu
@@ -16,7 +16,10 @@ spec:
     spec:
       containers:
       - name: drug-detector-serving
-        image: hotrank/drug_detector_serving
+        image: hotrank/test-batching
+        args:
+        - --enable_batching
+        # - --batching_parameters_file=/home/temp/BS10-1ms.conf
         resources:
           limits:
             nvidia.com/gpu: 1 # requesting 1 GPU

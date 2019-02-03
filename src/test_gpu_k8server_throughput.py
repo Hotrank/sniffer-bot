@@ -10,10 +10,10 @@ import MySQLdb
 import subprocess
 import os
 
-MODEL_SERVER_URL = 'http://ab61c4f06265211e987ef0ee9a12caec-2038447575.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict'
+MODEL_SERVER_URL = 'http://ae519c526270011e987ef0ee9a12caec-650811435.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict'
 test_dir = '../images/train/normal/'
 image_size = 224
-batch_size = 5
+batch_size = 1
 
 
 
@@ -51,14 +51,14 @@ def worker(q):
             payload =  { "instances": inputs}
             r = requests.post(MODEL_SERVER_URL, json=payload)
             inputs = []
-            count == 0
+            count = 0
             # mydb.commit()
-    payload =  { "instances": inputs}
-    r = requests.post(MODEL_SERVER_URL, json=payload)
-    mydb.commit()
+    if len(inputs) > 0:
+        payload =  { "instances": inputs}
+        r = requests.post(MODEL_SERVER_URL, json=payload)
+        mydb.commit()
     mycursor.close()
     mydb.close()
-
 
 def push_jobs(q, dir):
     fnames = os.listdir(dir)
@@ -69,7 +69,7 @@ def push_jobs(q, dir):
 
 
 if __name__ == '__main__':
-    n_workers = 2
+    n_workers = 5
     pQueue = multiprocessing.Queue()
     n_jobs = push_jobs(pQueue, test_dir)
     processes = []
