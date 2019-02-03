@@ -36,10 +36,11 @@ Then, create a service with type: LoadBalancer to expose the app.
 
 to create a deployment, edit deployment.yml then run:
 kubectl create -f deployment.yml
+to update the deployent, edit the file and then run:
+kubectl apply -f deployment.yml
 
 to create a service, edit service.yml then run
 kubectl create -f service.yml
-
 
 
 To see pods/services/deployments:
@@ -51,7 +52,12 @@ kubectl delete svc <YourServiceName>
 To scale a deployment:
 kubectl scale deployments/drug-detector-dep --replicas=3
 
-
-
 To stop the cluster and restart, follow the last response in this post:
 https://github.com/kubernetes/kops/issues/1132
+
+first edit the nodes config, change the min and max sizes to 0:
+kops edit ig nodes --name heming.k8s.local
+
+then update the cluster:
+kops update cluster --name heming.k8s.local --yes
+kops rolling-update cluster --name heming.k8s.local
