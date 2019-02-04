@@ -20,6 +20,6 @@ def producer():
             zmq_socket.send_json(meta_data, flags=zmq.SNDMORE)
             zmq_socket.send(message)
     zmq_socket.send_json({'url': 'done'})
-    print('all images sent. total jobs:' len(fnames))
+    print('all images sent. total jobs:', len(fnames))
 
 producer()

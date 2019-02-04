@@ -79,18 +79,16 @@ def worker(q):
     sql = "INSERT INTO images (url, process_date, path, flag) VALUES (%s, %s, %s, %s)"
     path = 'fake_path'
     while True:
-        url, image_bytes = q.get(block=True)
+        try:
+            url, image_bytes = q.get(block=True, timeout = 5)
+        except:
+            break
         if url == 'start':
             global start
             start = time()
-            print('start processing...', start)
+            print('start processing... please start producer in 5 seconds', start)
             continue
         if url == 'done':
-            global end
-            end = time()
-            print('processing finished', end)
-            if start>0:
-                print('total time', end-start )
             break
         input = preprocess_img(image_bytes)
         payload =  { "instances": [{'input_image': input.tolist()}]}
@@ -144,4 +142,8 @@ if __name__ == '__main__':
         processes.append(process)
     for process in processes:
         process.join()
+        end = time()
+        print('processing finished', end)
+        if start>0:
+            print('total time', end-start )
     print('number of workers:', n_workers)
