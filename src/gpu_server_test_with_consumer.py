@@ -129,6 +129,7 @@ def enqueue_jobs(q):
         q.put(item)
         global job_count
         job_count += 1
+    print('total job:', job_count)
 
 
 if __name__ == '__main__':
