@@ -31,6 +31,10 @@ sudo docker run -d --name serving_base_1 tensorflow/serving:latest-gpu
 sudo docker cp /home/ubuntu/drug_detect/model/exported serving_base_1:models/drug_detector
 sudo docker commit --change "ENV MODEL_NAME drug_detector" serving_base_1 heming/drug-detector-gpu
 sudo docker kill serving_base_1
+To check if copy succeeded, go to the running container
+sudo docker exec -it <container_name> /bin/bash
+
+
 
 run the tensorflow serving image as a container:
 sudo docker run -p 8501:8501 -t $USER/drug_detect_serving &
@@ -41,6 +45,11 @@ sudo docker run --runtime=nvidia -p 8501:8501 -t heming/drug-detector-gpu &
 
 install miniconda following this post:
 https://gist.github.com/arose13/fcc1d2d5ad67503ba9842ea64f6bac35
+
+set environment with tensorflow and python 3.5
+conda create --name tf tensorflow python=3.5
+
+
 
 install Docker:
 follow instruction from this post: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
@@ -60,3 +69,6 @@ conda create -n tf tensorflow python=3.5
 
 get GPU info:
 sudo lshw -C display
+
+delete all stopped containers:
+docker rm $(docker ps -a -q)

@@ -1,11 +1,22 @@
-producer:
-ip: 10.0.0.13
+intake-server:
+internal ip: 10.0.0.13
 port 5557
 conda env: tf
 
-consumer:
-ip: 10.0.0.14
+processing server (test-instance):
+internal ip: 10.0.0.14
 conda env: test
+
+k8s-gpu-node-1:
+ip:
+
+k8s-gpu-node-2:
+ip:
+
+
+
+
+
 
 
 github:
@@ -16,3 +27,9 @@ ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-34-228-191-34.compute-1.amazonaws.
 
 connect to the GPU-test server:
 ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-35-175-215-43.compute-1.amazonaws.com
+
+connect to preprocessing-server-2 (8cpu):
+ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-3-94-84-2.compute-1.amazonaws.com
+
+connect to preprocessing-test-only (16cpu):
+ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-52-87-189-78.compute-1.amazonaws.com

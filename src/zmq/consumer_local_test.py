@@ -12,11 +12,11 @@ def consumer():
     receiving_dir = '../../images/received/'
     while True:
         meta_data = consumer_receiver.recv_json()
-        saving_path = receiving_dir+meta_data['filename']
+        saving_path = receiving_dir+meta_data['url']
         message = consumer_receiver.recv()
         with open(saving_path, 'wb') as f:
             bytes = bytearray(base64.b64decode(message))
             f.write(bytes)
-        print('one image saved')
+
 
 consumer()
