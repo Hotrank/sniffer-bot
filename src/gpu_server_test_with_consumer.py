@@ -132,7 +132,7 @@ def enqueue_jobs(q):
 
 
 if __name__ == '__main__':
-    n_workers = 1
+    n_workers = 20
     pQueue = multiprocessing.Queue()
     processes = []
     enqueue_jobs(pQueue)
@@ -142,8 +142,8 @@ if __name__ == '__main__':
         processes.append(process)
     for process in processes:
         process.join()
-        end = time()
-        print('processing finished', end)
-        if start>0:
-            print('total time', end-start )
+    end = time()
+    print('processing finished', end)
+    if start>0:
+        print('total time', end-start )
     print('number of workers:', n_workers)
