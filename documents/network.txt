@@ -23,7 +23,7 @@ github:
 https://github.com/Hotrank/drug_detect.git
 
 to connect to intake-server:
-ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-34-228-191-34.compute-1.amazonaws.com
+ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-35-171-188-153.compute-1.amazonaws.com
 
 connect to the GPU-test server:
 ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-35-175-215-43.compute-1.amazonaws.com
@@ -31,5 +31,8 @@ ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-35-175-215-43.compute-1.amazonaws.
 connect to preprocessing-server-2 (8cpu):
 ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-3-94-84-2.compute-1.amazonaws.com
 
-connect to preprocessing-test-only (16cpu):
+connect to preprocessing-server-01 (16cpu):
 ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-52-87-189-78.compute-1.amazonaws.com
+
+connect to preprocessing-server-02 (16cpu)
+ssh -i .ssh/heming-IAM-keypair.pem ubuntu@ec2-34-226-220-227.compute-1.amazonaws.com

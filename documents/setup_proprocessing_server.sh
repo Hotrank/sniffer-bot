@@ -13,4 +13,6 @@ source activate tf
 conda install pillow
 conda install requests
 conda install -c anaconda mysqlclient
+sudo apt-get install libzmq3-dev
+conda install -c anaconda pyzmq
 git clone https://github.com/Hotrank/drug_detect.git
