@@ -3,14 +3,16 @@ Follow See [this tutorial](https://ramhiser.com/post/2018-05-20-setting-up-a-kub
 #### Prerequisites
 1. Create an AWS account and install the AWS Command Line Interface:  
 ```
-pip install awscli --upgrade --user```  
+pip install awscli --upgrade --user
+```  
 2. Configure your AWS CLI with your credential: `aws configure`
 
 3. Install kubectl and kops:  
 ```
 curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
 chmod +x kops-linux-amd64
-sudo mv kops-linux-amd64 /usr/local/bin/kops```  
+sudo mv kops-linux-amd64 /usr/local/bin/kops
+```  
 ```
 sudo apt-get update && sudo apt-get install -y apt-transport-https
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -54,4 +56,40 @@ kubectl apply -f deployment.yml
 To find the LoadBalancer ingress, use
 ```
 kubectl describe service
+```
+
+#### Setup for GPU instance [optional]
+If deploying TensorFlow on GPU, each node in the k8s cluster needs to be a GPU instance. After the cluster is up, ssh into each node instance and install the Nvidia driver and Nvidia-Docker2
+
+1. Install Nvidia driver
+```
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt update
+sudo apt install nvidia-384
+sudo reboot
+nvidia-smi
+```
+
+2. Install Nvidia-Docker2  
+```
+# Update apt source list
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
+  sudo apt-key add -
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update
+```
+```
+# check Docker version
+sudo docker version
+```
+```
+# find the versions of nvidia-docker and runtime that's compatible with docker version
+apt-cache madison nvidia-docker2 nvidia-container-runtime
+```
+```
+# install using the correct versions
+sudo apt-get install -y nvidia-docker2=2.0.3+docker17.03.2-1 nvidia-container-runtime=2.0.0+docker17.03.2-1
+sudo pkill -SIGHUP dockerd
 ```
