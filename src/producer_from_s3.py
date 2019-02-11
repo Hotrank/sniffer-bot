@@ -21,7 +21,7 @@ def producer():
         url = BUCKET_NAME + '/' + file.key
         bytes = bytearray(file.get()['Body'].read())
         message = base64.b64encode(bytes)
-        meta_data = { 'url' : url }
+        meta_data = {'url' : url}
         zmq_socket.send_json(meta_data, flags=zmq.SNDMORE)
         zmq_socket.send(message)
     zmq_socket.send_json({'url': 'done'})
