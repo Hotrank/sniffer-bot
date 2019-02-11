@@ -1,6 +1,6 @@
-Follow See [this tutorial](https://ramhiser.com/post/2018-05-20-setting-up-a-kubernetes-cluster-on-aws-in-5-minutes/) to set up a kubernetes cluster.
+This instruction shows how to setup up a Kubernets cluster on AWS with kops, and how to deploy the containerized app on the cluster with kubectl. The first part of the instruction (prerequisites and cluster setup) is mostly referencing [this tutorial](https://ramhiser.com/post/2018-05-20-setting-up-a-kubernetes-cluster-on-aws-in-5-minutes/).
 
-#### Prerequisites
+### Prerequisites
 1. Create an AWS account and install the AWS Command Line Interface:  
 ```
 pip install awscli --upgrade --user
@@ -22,7 +22,7 @@ sudo apt-get install -y kubectl
 ```  
 4. create an S3 bucket to store the cluster state.
 
-#### Setting up the k8s cluster
+### Setting up the k8s cluster
 
 1. Setup the environmental variables  
 ```
@@ -44,7 +44,7 @@ This may take a few minutes. Use the following command to check the status.
 kops validate cluster
 ```
 
-#### Deploy the Model
+### Deploy the Model on k8s cluster
 1. Create a Deployment to run the model container
 ```
 kubectl create -f deployment-gpu.yml
@@ -58,7 +58,7 @@ To find the LoadBalancer ingress, use
 kubectl describe service
 ```
 
-#### Setup for GPU instance [optional]
+### Setup for GPU instance [optional]
 If deploying TensorFlow on GPU, each node in the k8s cluster needs to be a GPU instance. After the cluster is up, ssh into each node instance and install the Nvidia driver and Nvidia-Docker2
 
 1. Install Nvidia driver
