@@ -3,7 +3,7 @@ import base64
 import os
 
 
-SOURCE_DIR = '../../images/test/'
+SOURCE_DIR = '../../test_images/'
 
 def producer():
     context = zmq.Context()
