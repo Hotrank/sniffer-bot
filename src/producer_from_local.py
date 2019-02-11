@@ -3,7 +3,7 @@ import base64
 import os
 
 
-SOURCE_DIR = '../../test_images/'
+SOURCE_DIR = '../test_images/'
 ITERATIONS = 50
 
 def producer():

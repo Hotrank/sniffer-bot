@@ -1,0 +1,11 @@
+{
+    "mysql":{
+        "db_host" : "mysql-large.ccsroiuq1uw2.us-east-1.rds.amazonaws.com",
+        "db_port" : 3306,
+        "db_user" : "heming",
+        "db_passwd": "xenia0427rds",
+        "db_name": "mydb"
+    },
+    "zmq_producer" : "tcp://10.0.0.13:5557",
+    "model_server" : "http://ae519c526270011e987ef0ee9a12caec-650811435.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict"
+}

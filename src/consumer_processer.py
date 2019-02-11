@@ -1,6 +1,7 @@
 import requests
 from tensorflow.python.keras.applications.resnet50 import preprocess_input
 from tensorflow.python.keras.preprocessing.image import img_to_array
+from PIL import Image as pil_image
 import numpy as np
 import json
 from time import time
@@ -9,22 +10,25 @@ import datetime
 import MySQLdb
 import os
 import io
-from PIL import Image as pil_image
 import zmq
 import base64
 
+with open('config.json') as json_config_file:
+    config = json.load(json_config_file)
 
-model_server = 'http://ae519c526270011e987ef0ee9a12caec-650811435.us-east-1.elb.amazonaws.com:80/v1/models/drug_detector:predict'
+MODEL_SERVER = config['model_server']
+
+DB_HOST = config['mysql']['db_host']
+DB_PORT = config['mysql']['db_port']
+DB_USER = config['mysql']['db_user']
+DB_PASSWD = config['mysql']['db_passwd']
+DB_NAME = config['myswl']['db_name']
+PRODUCER_ADDRESS = config['zmq_producer']
+
+N_WORKERS = 20
+COMMIT_SIZE = 20
+
 image_size = 224
-commit_size = 20
-db_host= "mysql-large.ccsroiuq1uw2.us-east-1.rds.amazonaws.com"
-db_port = 3306
-db_user = "heming"
-db_passwd="xenia0427rds"
-db_name="mydb"
-intake_server = "tcp://10.0.0.13:5557"
-job_count = 0
-start, end = 0, 0
 
 def load_bytes_img(bytes, grayscale=False, target_size=None):
     """Loads an image from byte array into PIL format.
@@ -66,38 +70,36 @@ def worker(q):
     q: the work queue. Each item in the queue contains one image in bytes and
     its metadata in json'''
     mydb = MySQLdb.connect(
-        host = db_host,
-        port = db_port,
-        user = db_user,
-        passwd= db_passwd,
-        db= db_name
+        host = DB_HOST,
+        port = DB_PORT,
+        user = DB_USER,
+        passwd= DB_PASSWD,
+        db= DB_NAME
         )
     mycursor = mydb.cursor()
 
     count = 0
     val = []
-    sql = "INSERT INTO images (url, process_date, path, flag) VALUES (%s, %s, %s, %s)"
-    path = 'fake_path'
+    sql = "INSERT INTO images (url, process_date, flag) VALUES (%s, %s, %s)"
+
     while True:
         try:
             url, image_bytes = q.get(block=True, timeout = 5)
         except:
             break
         if url == 'start':
-            global start
-            start = time()
-            print('start processing... please start producer in 5 seconds', start)
+            print('start processing at', time())
             continue
         if url == 'done':
             break
         input = preprocess_img(image_bytes)
         payload =  { "instances": [{'input_image': input.tolist()}]}
-        r = requests.post(model_server, json=payload)
+        r = requests.post(MODEL_SERVER, json=payload)
         flag = decode_response(r)
-        date = datetime.datetime.today().strftime('%Y-%m-%d')
-        val.append((url, date, path, flag))
+        process_date = datetime.datetime.today().strftime('%Y-%m-%d')
+        val.append((url, process_date, flag))
         count += 1
-        if count == commit_size:
+        if count == COMMIT_SIZE:
             mycursor.executemany(sql, val)
             mydb.commit()
             val = []
@@ -111,7 +113,7 @@ def worker(q):
 def enqueue_jobs(q):
     context = zmq.Context()
     receiver = context.socket(zmq.PULL)
-    receiver.connect(intake_server)
+    receiver.connect(PRODUCER_ADDRESS)
 
     while True:
         meta_data = receiver.recv_json()
@@ -120,24 +122,21 @@ def enqueue_jobs(q):
             q.put(('start', None))
             continue
         if url == 'done':
-            q.put(('done', None))
+            # TODO: put send finish signal to queue n_worker times
             print ('all jobs queued.')
             break
         message = receiver.recv()
         image_bytes = bytearray(base64.b64decode(message))
         item = (url, image_bytes)
         q.put(item)
-        global job_count
-        job_count += 1
-    print('total job:', job_count)
 
 
 if __name__ == '__main__':
-    n_workers = 20
     pQueue = multiprocessing.Queue()
     processes = []
-    enqueue_jobs(pQueue)
-    for _ in range(n_workers):
+    enqueue_process = multiprocessing.Process(target=enqueue_jobs, args=(pQueue,))
+    processes.append(enqueue_process)
+    for _ in range(N_WORKERS):
         process = multiprocessing.Process(target=worker, args=(pQueue,))
         process.start()
         processes.append(process)
@@ -145,6 +144,3 @@ if __name__ == '__main__':
         process.join()
     end = time()
     print('processing finished', end)
-    if start>0:
-        print('total time', end-start )
-    print('number of workers:', n_workers)
