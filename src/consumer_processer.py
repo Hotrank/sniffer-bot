@@ -4,11 +4,9 @@ from time import time
 import multiprocessing
 import datetime
 import MySQLdb
-import os
-import io
 import zmq
 import base64
-from src.utils import preprocess_img, decode_response
+from utils import preprocess_img, decode_response
 
 with open('config.json') as json_config_file:
     config = json.load(json_config_file)

@@ -2,6 +2,8 @@ from tensorflow.python.keras.applications.resnet50 import preprocess_input
 from tensorflow.python.keras.preprocessing.image import img_to_array
 from PIL import Image as pil_image
 import numpy as np
+import io
+import json
 
 image_size = 224
 
