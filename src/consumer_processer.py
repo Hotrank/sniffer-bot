@@ -1,8 +1,4 @@
 import requests
-from tensorflow.python.keras.applications.resnet50 import preprocess_input
-from tensorflow.python.keras.preprocessing.image import img_to_array
-from PIL import Image as pil_image
-import numpy as np
 import json
 from time import time
 import multiprocessing
@@ -12,6 +8,7 @@ import os
 import io
 import zmq
 import base64
+from src.utils import preprocess_img, decode_response
 
 with open('config.json') as json_config_file:
     config = json.load(json_config_file)
@@ -22,46 +19,11 @@ DB_HOST = config['mysql']['db_host']
 DB_PORT = config['mysql']['db_port']
 DB_USER = config['mysql']['db_user']
 DB_PASSWD = config['mysql']['db_passwd']
-DB_NAME = config['myswl']['db_name']
+DB_NAME = config['mysql']['db_name']
 PRODUCER_ADDRESS = config['zmq_producer']
 
 N_WORKERS = 20
 COMMIT_SIZE = 20
-
-image_size = 224
-
-def load_bytes_img(bytes, grayscale=False, target_size=None):
-    """Loads an image from byte array into PIL format.
-    moddified from tf.python.keras.preprocessing.image.load_img
-    """
-
-    img = pil_image.open(io.BytesIO(bytes))
-    if grayscale:
-      if img.mode != 'L':
-        img = img.convert('L')
-    else:
-      if img.mode != 'RGB':
-        img = img.convert('RGB')
-    if target_size:
-      hw_tuple = (target_size[1], target_size[0])
-      if img.size != hw_tuple:
-        img = img.resize(hw_tuple)
-    return img
-
-
-def preprocess_img(image_bytes, image_size=image_size):
-    ''' preprocess an image from bytes array to input form for resnet model'''
-    img = img_to_array(load_bytes_img(image_bytes, target_size=(image_size, image_size)))
-    img_array = np.array(img)
-    output = preprocess_input(img_array)
-    return output
-
-
-def decode_response(r):
-    ''' decode the prediction to True (drug) or False (not drug)'''
-    scores = json.loads(r.content.decode('utf-8'))['predictions']
-    return bool(np.argmin(scores, 1))
-
 
 
 def worker(q):
@@ -135,6 +97,7 @@ if __name__ == '__main__':
     pQueue = multiprocessing.Queue()
     processes = []
     enqueue_process = multiprocessing.Process(target=enqueue_jobs, args=(pQueue,))
+    enqueue_process.start()
     processes.append(enqueue_process)
     for _ in range(N_WORKERS):
         process = multiprocessing.Process(target=worker, args=(pQueue,))
