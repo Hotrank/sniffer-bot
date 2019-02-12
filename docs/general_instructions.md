@@ -12,5 +12,5 @@ This is a very high level instruction on how to setup and run the project.
 3. Create an AWS RDS MySQL database.
 
 #### System Operation
-1. run consumer_processer.py on every "pre-processing server"
-2. run producer_from_local.py on the "intake-server" if the images are in the "intake-server", or run producer_from_s3.py if the images are stored in a S3 bucket.
+1. Run consumer_processer.py on every "pre-processing server"
+2. Run producer_from_local.py on the "intake-server" if the images are in the "intake-server", or run producer_from_s3.py if the images are stored in a S3 bucket.
