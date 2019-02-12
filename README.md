@@ -15,3 +15,5 @@ After the k8s cluster is up and running, "deployment" and "service" can be launc
 
 ### Complete project framework
 ZeroMQ(zmq) was used to generate a stream of images from an S3 bucket. Multiple CPU instances will consume these images, send them to the k8s cluster for inference, and save the prediction to a MySQL database. See the diagram illustration below.
+
+![Alt text](pics/framework.png)
