@@ -1,6 +1,7 @@
 # sniffer-bot: Insight Data Engineering Project 2019A
 
 [Presentation deck](https://drive.google.com/file/d/1i8NQDDCrR09OHXPSJf1KHjCGZxsOQ7cs/view?usp=sharing) at ODSC East 2019.
+Find me on [linked in](linkedin.com/in/hemingzhen)
 
 Social media platforms is bringing us closer than over. However it can be used for unintended purpose - selling illegal drugs (see this [Washington Post article](https://www.washingtonpost.com/business/economy/instagram-has-a-drug-problem-its-algorithms-make-it-worse/2018/09/25/c45bf730-bdbf-11e8-b7d2-0773aa1e33da_story.html?utm_term=.3700f22caf22)). For sniffer-bot project, I trained a image classification model to identify certain drug images, deployed it in a TensorFlow docker container, and scaled it up on a Kubernetes GPU cluster on AWS.
 
