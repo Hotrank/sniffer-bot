@@ -1,0 +1,13 @@
+# fill info and change the name to config.json
+
+{
+    "mysql":{
+        "db_host" : "MySQL host address",
+        "db_port" : "MySQL port (default: 3306)",
+        "db_user" : "User Name",
+        "db_passwd": "Password",
+        "db_name": "Database name"
+    },
+    "zmq_producer" : "tcp://ZMQ_producer ip and port",
+    "model_server" : "<k8s loadbalancer ingress>:80/v1/models/<Model_Name>:predict"
+}
