@@ -1,6 +1,8 @@
 # sniffer-bot: Insight Data Engineering Project 2019A
 
-Social media platforms is bringing us closer than over. However it can be used for unintended purpose - selling illegal drugs (see this [Washington Post article](https://www.washingtonpost.com/business/economy/instagram-has-a-drug-problem-its-algorithms-make-it-worse/2018/09/25/c45bf730-bdbf-11e8-b7d2-0773aa1e33da_story.html?utm_term=.3700f22caf22)). For sniffer-bot project, I trained a image classification model to identify certain drug images, deployed it in a TensorFlow docker container, and scaled it up on a Kubernetes GPU cluster on AWS. See [project presentation](http://bit.ly/snifferbot).
+For folks who attended my talk at ODSC East and are interested in the presentation, I will be uploading it by 5/2/2019. Thanks.
+
+Social media platforms is bringing us closer than over. However it can be used for unintended purpose - selling illegal drugs (see this [Washington Post article](https://www.washingtonpost.com/business/economy/instagram-has-a-drug-problem-its-algorithms-make-it-worse/2018/09/25/c45bf730-bdbf-11e8-b7d2-0773aa1e33da_story.html?utm_term=.3700f22caf22)). For sniffer-bot project, I trained a image classification model to identify certain drug images, deployed it in a TensorFlow docker container, and scaled it up on a Kubernetes GPU cluster on AWS. 
 
 ### Prepare a image Classification Model
 The model was trained with Keras (TensorFlow backend) using transfer learning based on Resnet50. Essentially the last layer of Resnet50 was replaced by a binary softmax, and the corresponding weights re-trained for drug image classification.
